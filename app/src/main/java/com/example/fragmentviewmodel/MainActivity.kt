@@ -6,6 +6,7 @@ import com.example.fragmentviewmodel.databinding.ActivityMainBinding
 import com.example.fragmentviewmodel.viewModels.MainActivityViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.fragmentviewmodel.factory.MainActivityViewModelFactory
+import com.example.fragmentviewmodel.fragments.Fragment1
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -20,14 +21,18 @@ class MainActivity : AppCompatActivity() {
         viewModelFactory = MainActivityViewModelFactory(0)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel::class.java)
 
-        viewModel.counterScore.observe(
-            this
-        ) {
-            binding.counter.text = it.toString()
-        }
-
         binding.btnAdd.setOnClickListener {
             viewModel.incrementCounterScore()
+            val fragment1 = supportFragmentManager.findFragmentByTag("fragment1")
+
+            if (fragment1 == null) {
+                val fragTransaction = supportFragmentManager.beginTransaction()
+                fragTransaction.replace(R.id.flMain, Fragment1(), "fragment1").commit()
+            }
+        /*else {
+                val fragTransaction = supportFragmentManager.beginTransaction()
+                fragTransaction.remove(fragment1).commit()
+            }*/
         }
     }
 }
